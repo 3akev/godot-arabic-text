@@ -15,9 +15,12 @@ _global_script_class_icons={
 
 [application]
 
-config/name="arabic-reshaper-test"
-run/main_scene="res://Control.tscn"
+config/name="arabic-text"
 config/icon="res://icon.png"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "arabic-text" )
 
 [rendering]
 

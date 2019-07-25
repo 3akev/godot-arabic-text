@@ -16,9 +16,9 @@
 # Copyright (C) 2008-2010 Yaacov Zamir <kzamir_a_walla.co.il>,
 # Copyright (C) 2010-2015 Meir kriheli <mkriheli@gmail.com>.
 
-var MIRRORED = load("res://bidi/mirror.gd").new().MIRRORED
+var MIRRORED = preload("res://addons/arabic-text/bidi/mirror.gd").new().MIRRORED
 
-var unicodedata = load("res://bidi/unicodedata.gd").new()
+var unicodedata = preload("res://addons/arabic-text/bidi/unicodedata.gd").new()
 
 var True = true
 var False = false

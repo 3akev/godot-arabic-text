@@ -1,4 +1,4 @@
-var db = load("res://bidi/unicode_db.gd").new()
+var db = preload("res://addons/arabic-text/bidi/unicode_db.gd").new()
 var index1 = db.index1
 var index2 = db.index2
 var Database_Records = db.Database_Records

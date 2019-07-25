@@ -22,9 +22,9 @@
 # displaying/printing of the text, like writing it to PIL Image or passing it
 # to a PDF generating method.
 
-var LIGATURES = load("res://reshaper/ligatures.gd").new().LIGATURES
+var LIGATURES = preload("res://addons/arabic-text/reshaper/ligatures.gd").new().LIGATURES
 
-var letters = load("res://reshaper/letters.gd").new()
+var letters = preload("res://addons/arabic-text/reshaper/letters.gd").new()
 var ISOLATED = letters.ISOLATED
 var TATWEEL = letters.TATWEEL
 var ZWJ = letters.ZWJ
@@ -36,6 +36,19 @@ var UNSHAPED = letters.UNSHAPED
 
 var HARAKAT_RE = RegEx.new()
 
+var _ligatures_re = RegEx.new()
+var _ligature_dict = {}
+
+func _init():
+	var patterns = []
+	var FORMS = 1
+	var MATCH = 0
+	
+	var ligature = '\u0644\u0627'
+	var replacement = ['\uFEFB', '', '', '\uFEFC']
+	
+	_ligature_dict[ligature] = replacement
+	_ligatures_re.compile(ligature)
 
 
 func reshape(text):
@@ -54,12 +67,10 @@ func reshape(text):
 	var delete_tatweel = false
 	var support_zwj = false
 	var shift_harakat_position = true
-	var use_unshaped_instead_of_isolated = true
 
 	var positions_harakat = {}
 
-	var isolated_form = (UNSHAPED
-						if use_unshaped_instead_of_isolated else ISOLATED)
+	var isolated_form = ISOLATED
 
 	for letter in text:
 		if HARAKAT_RE.search(letter):
@@ -117,6 +128,46 @@ func reshape(text):
 
 	if support_zwj and output and output[-1][LETTER] == ZWJ:
 		output.pop()
+
+	# Clean text from Harakat to be able to find ligatures
+	text = HARAKAT_RE.sub(text, '')
+
+	# Clean text from Tatweel to find ligatures if delete_tatweel
+	if delete_tatweel:
+		text = text.replace(TATWEEL, '')
+	
+	# ligatures
+	var m = _ligatures_re.search(text)
+	if m != null:
+		var forms = _ligature_dict[m.strings[0]]
+		var a = m.get_start()
+		var b = m.get_end()
+		var a_form = output[a][FORM]
+		var b_form = output[b - 1][FORM]
+		var ligature_form = null
+	
+		# +-----------+----------+---------+---------+----------+
+		# | a   \   b | ISOLATED | INITIAL | MEDIAL  | FINAL    |
+		# +-----------+----------+---------+---------+----------+
+		# | ISOLATED  | ISOLATED | INITIAL | INITIAL | ISOLATED |
+		# | INITIAL   | ISOLATED | INITIAL | INITIAL | ISOLATED |
+		# | MEDIAL    | FINAL    | MEDIAL  | MEDIAL  | FINAL    |
+		# | FINAL     | FINAL    | MEDIAL  | MEDIAL  | FINAL    |
+		# +-----------+----------+---------+---------+----------+
+	
+		if a_form in [isolated_form, INITIAL]:
+			if b_form in [isolated_form, FINAL]:
+				ligature_form = ISOLATED
+			else:
+				ligature_form = INITIAL
+		else:
+			if b_form in [isolated_form, FINAL]:
+				ligature_form = FINAL
+			else:
+				ligature_form = MEDIAL
+		output[a] = [forms[ligature_form], NOT_SUPPORTED]
+		for i in range(a+1, b):
+			output[i] = ['', NOT_SUPPORTED]
 
 	var result = []
 	if not delete_harakat and -1 in positions_harakat:
