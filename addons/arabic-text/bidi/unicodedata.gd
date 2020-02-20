@@ -36,6 +36,9 @@ func mirrored(ch):
 		index = 0;
 	else:
 		index = index1[code>>SHIFT]
-		index = index2[index<<SHIFT + code&(1<<SHIFT - 1)]
+		var lsh = index << SHIFT
+		var added = code&(1<<SHIFT - 1)
+		var i = lsh + added
+		index = index2[i]
 
 	return Database_Records[index][DatabaseRecord.mirrored];
