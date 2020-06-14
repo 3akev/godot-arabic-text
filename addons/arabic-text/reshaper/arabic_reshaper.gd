@@ -124,10 +124,10 @@ func reshape(text):
 
 		# Remove ZWJ if it's the second to last item as it won't be useful
 		if support_zwj and len(output) > 1 and output[-2][LETTER] == ZWJ:
-			output.pop(len(output) - 2)
+			output.remove(len(output) - 2)
 
 	if support_zwj and output and output[-1][LETTER] == ZWJ:
-		output.pop()
+		output.pop_back()
 
 	# Clean text from Harakat to be able to find ligatures
 	text = HARAKAT_RE.sub(text, '')
@@ -171,7 +171,8 @@ func reshape(text):
 
 	var result = []
 	if not delete_harakat and -1 in positions_harakat:
-		result.extend(positions_harakat[-1])
+		#result.extend(positions_harakat[-1])
+		result +=positions_harakat[-1]
 	for o in output:
 		var i = output.find(o)
 		if o[LETTER]:
@@ -182,7 +183,8 @@ func reshape(text):
 
 		if not delete_harakat:
 			if i in positions_harakat:
-				result.extend(positions_harakat[i])
+				#result.extend(positions_harakat[i])
+				result += positions_harakat[i]
 	
 	var str_result = ''
 	for s in result:
