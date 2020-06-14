@@ -15,5 +15,9 @@ margin_top = 94.4549
 margin_right = 252.983
 margin_bottom = 117.455
 custom_fonts/font = SubResource( 1 )
-text = "سلام"
+text = "ﻡﻼﺳ"
 script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+arabic_input = "سلام"
