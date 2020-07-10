@@ -31,12 +31,12 @@ func test_multiple_words_with_ligatures():
 	var result = bidi.get_display(reshaper.reshape(input))
 	assert_eq(result, expected)
 
-#func test_multiline():
-#	var input = """مرحبا
-#الجو غائم
-#والرياح شديدة"""
-#	var expected = """ﺎﺒﺣﺮﻣ
-#ﻢﺋﺎﻏ ﻮﺠﻟﺍ
-#ﺓﺪﻳﺪﺷ ﺡﺎﻳﺮﻟﺍﻭ"""
-#	var result = bidi.get_display(reshaper.reshape(input))
-#	assert_eq(result, expected)
+func test_multiline():
+	var input = """مرحبا
+الجو غائم
+والرياح شديدة"""
+	var expected = """ﺎﺒﺣﺮﻣ
+ﻢﺋﺎﻏ ﻮﺠﻟﺍ
+ﺓﺪﻳﺪﺷ ﺡﺎﻳﺮﻟﺍﻭ"""
+	var result = bidi.get_display(reshaper.reshape(input))
+	assert_eq(result, expected)

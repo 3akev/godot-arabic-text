@@ -451,7 +451,7 @@ func reverse_contiguous_sequence(storage, line_start, line_end, highest_level,
 		var _end = null
 		
 		var c = null
-
+		
 		for run_idx in range(line_start, line_end+1):
 			var run_ch = chars[run_idx]
 
@@ -478,7 +478,7 @@ func reverse_contiguous_sequence(storage, line_start, line_end, highest_level,
 		if _start != null:
 			c = chars.duplicate()
 			storage['chars'] = []
-			for i in range(0, _start-1, 1):
+			for i in range(0, _start, 1):
 				storage['chars'].append(c[i])
 			for i in range(_end, _start-1, -1):
 				storage['chars'].append(c[i])
@@ -494,9 +494,8 @@ func reorder_resolved_levels(storage, debug):
 	var should_reset = True
 	var chars = storage['chars']
 	
-	var c = []
-	for i in range(chars.size() - 1, -1, -1):
-		c.append(chars[i])
+	var c = chars.duplicate()
+	c.invert()
 	for _ch in c:
 		# L1. On each line, reset the embedding level of the following
 		# characters to the paragraph embedding level:
