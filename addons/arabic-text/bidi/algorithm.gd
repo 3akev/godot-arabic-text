@@ -1,3 +1,4 @@
+tool
 # This file is part of python-bidi
 #
 # python-bidi is free software: you can redistribute it and/or modify
@@ -171,8 +172,9 @@ func explicit_embed_and_overrides(storage, debug=False):
 						embedding_level != EXPLICIT_LEVEL_LIMIT - 1:
 					almost_overflow_counter -= 1
 				elif levels:
-					embedding_level = levels.pop()[0]
-					directional_override = levels.pop()[1]
+					var tmp = levels.pop_back()
+					embedding_level = tmp[0]
+					directional_override = tmp[1]
 
 			# X8
 			elif bidi_type == 'B':
@@ -307,7 +309,7 @@ func resolve_weak_types(storage, debug=False):
 			prev_type = chars[idx-1]['type']
 			var next_type = chars[idx+1]['type']
 
-			if bidi_type == 'ES' and (prev_type == next_type == 'EN'):
+			if bidi_type == 'ES' and prev_type == next_type and prev_type == 'EN':
 				chars[idx]['type'] = 'EN'
 
 			if bidi_type == 'CS' and prev_type == next_type and \
