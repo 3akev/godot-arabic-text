@@ -137,37 +137,38 @@ func reshape(text):
 		text = text.replace(TATWEEL, '')
 	
 	# ligatures
-	var m = _ligatures_re.search(text)
-	if m != null:
-		var forms = _ligature_dict[m.strings[0]]
-		var a = m.get_start()
-		var b = m.get_end()
-		var a_form = output[a][FORM]
-		var b_form = output[b - 1][FORM]
-		var ligature_form = null
-	
-		# +-----------+----------+---------+---------+----------+
-		# | a   \   b | ISOLATED | INITIAL | MEDIAL  | FINAL    |
-		# +-----------+----------+---------+---------+----------+
-		# | ISOLATED  | ISOLATED | INITIAL | INITIAL | ISOLATED |
-		# | INITIAL   | ISOLATED | INITIAL | INITIAL | ISOLATED |
-		# | MEDIAL    | FINAL    | MEDIAL  | MEDIAL  | FINAL    |
-		# | FINAL     | FINAL    | MEDIAL  | MEDIAL  | FINAL    |
-		# +-----------+----------+---------+---------+----------+
-	
-		if a_form in [isolated_form, INITIAL]:
-			if b_form in [isolated_form, FINAL]:
-				ligature_form = ISOLATED
+	var ligs = _ligatures_re.search_all(text)
+	if ligs != []:
+		for m in ligs: 
+			var forms = _ligature_dict[m.strings[0]]
+			var a = m.get_start()
+			var b = m.get_end()
+			var a_form = output[a][FORM]
+			var b_form = output[b - 1][FORM]
+			var ligature_form = null
+		
+			# +-----------+----------+---------+---------+----------+
+			# | a   \   b | ISOLATED | INITIAL | MEDIAL  | FINAL    |
+			# +-----------+----------+---------+---------+----------+
+			# | ISOLATED  | ISOLATED | INITIAL | INITIAL | ISOLATED |
+			# | INITIAL   | ISOLATED | INITIAL | INITIAL | ISOLATED |
+			# | MEDIAL    | FINAL    | MEDIAL  | MEDIAL  | FINAL    |
+			# | FINAL     | FINAL    | MEDIAL  | MEDIAL  | FINAL    |
+			# +-----------+----------+---------+---------+----------+
+		
+			if a_form in [isolated_form, INITIAL]:
+				if b_form in [isolated_form, FINAL]:
+					ligature_form = ISOLATED
+				else:
+					ligature_form = INITIAL
 			else:
-				ligature_form = INITIAL
-		else:
-			if b_form in [isolated_form, FINAL]:
-				ligature_form = FINAL
-			else:
-				ligature_form = MEDIAL
-		output[a] = [forms[ligature_form], NOT_SUPPORTED]
-		for i in range(a+1, b):
-			output[i] = ['', NOT_SUPPORTED]
+				if b_form in [isolated_form, FINAL]:
+					ligature_form = FINAL
+				else:
+					ligature_form = MEDIAL
+			output[a] = [forms[ligature_form], NOT_SUPPORTED]
+			for i in range(a+1, b):
+				output[i] = ['', NOT_SUPPORTED]
 
 	var result = []
 	if not delete_harakat and -1 in positions_harakat:
