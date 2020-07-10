@@ -1,0 +1,9 @@
+language: minimal
+before_install:
+  - cd source
+  - wget "https://downloads.tuxfamily.org/godotengine/3.2.2/Godot_v3.2.2-stable_linux_headless.64.zip"
+  - sudo apt-get install unzip
+  - unzip Godot_v3.2.2-stable_linux_headless.64.zip
+  - chmod +x Godot_v3.2.2-stable_linux_headless.64
+script:
+  - ./Godot_v3.2.2-stable_linux_headless.64 -s addons/gut/gut_cmdln.gd --path . 
