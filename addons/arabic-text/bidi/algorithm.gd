@@ -584,28 +584,31 @@ static func get_display(unicode_or_str, encoding='utf-8', upper_is_rtl=false,
 	string.
 
 	"""
-	var storage = get_empty_storage()
-	var text = unicode_or_str
+	var text_ls = unicode_or_str.split("\n")
+	var processed = PoolStringArray()
+	for text in text_ls:
+		var storage = get_empty_storage()
+		
+		var base_level = null
+		if base_dir == null:
+			base_level = get_base_level(text, upper_is_rtl)
+		else:
+			base_level = PARAGRAPH_LEVELS[base_dir]
 	
-	var base_level = null
-	if base_dir == null:
-		base_level = get_base_level(text, upper_is_rtl)
-	else:
-		base_level = PARAGRAPH_LEVELS[base_dir]
-
-	storage['base_level'] = base_level
-	storage['base_dir'] = ['L', 'R'][base_level]
-
-	get_embedding_levels(text, storage, upper_is_rtl, debug)
-	explicit_embed_and_overrides(storage, debug)
-	resolve_weak_types(storage, debug)
-	resolve_neutral_types(storage, debug)
-	resolve_implicit_levels(storage, debug)
-	reorder_resolved_levels(storage, debug)
-	apply_mirroring(storage, debug)
-
-	var chars = storage['chars']
-	var display = ''
-	for _ch in chars:
-		display += _ch['ch']
-	return display
+		storage['base_level'] = base_level
+		storage['base_dir'] = ['L', 'R'][base_level]
+	
+		get_embedding_levels(text, storage, upper_is_rtl, debug)
+		explicit_embed_and_overrides(storage, debug)
+		resolve_weak_types(storage, debug)
+		resolve_neutral_types(storage, debug)
+		resolve_implicit_levels(storage, debug)
+		reorder_resolved_levels(storage, debug)
+		apply_mirroring(storage, debug)
+		
+		var display = ''
+		var chars = storage['chars']
+		for _ch in chars:
+			display += _ch['ch']
+		processed.append(display)
+	return processed.join("\n")
