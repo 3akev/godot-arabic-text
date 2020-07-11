@@ -1,8 +1,7 @@
 tool
 extends Label
 
-var reshaper = preload('res://addons/arabic-text/reshaper/arabic_reshaper.gd').new()
-var bidi = preload("res://addons/arabic-text/bidi/algorithm.gd").new()
+var arabic = preload('res://addons/arabic-text/arabic.gd').new()
 
 var prev_text = ''
 
@@ -14,7 +13,7 @@ func _set_arabic_input(s):
 	_on_ALabel_draw()
 
 func display():
-	text = bidi.get_display(reshaper.reshape(arabic_input))
+	text = arabic.process_text(arabic_input)
 
 func _ready():
 	display()
