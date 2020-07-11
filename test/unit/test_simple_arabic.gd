@@ -4,7 +4,7 @@ extends "res://addons/gut/test.gd"
 # this website is useful for getting the correct output:
 # http://www.arabic-keyboard.org/photoshop-arabic/
 
-var arabic = preload('res://addons/arabic-text/arabic.gd').new()
+const arabic = preload('res://addons/arabic-text/arabic.gd')
 
 func test_single_word_no_ligatures():
 	var input = "مستشفى"

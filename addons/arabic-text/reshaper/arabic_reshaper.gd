@@ -22,36 +22,31 @@
 # displaying/printing of the text, like writing it to PIL Image or passing it
 # to a PDF generating method.
 
-var LIGATURES = preload("res://addons/arabic-text/reshaper/ligatures.gd").new().LIGATURES
+const LIGATURES = preload("res://addons/arabic-text/reshaper/ligatures.gd").LIGATURES
 
-var letters = preload("res://addons/arabic-text/reshaper/letters.gd").new()
-var ISOLATED = letters.ISOLATED
-var TATWEEL = letters.TATWEEL
-var ZWJ = letters.ZWJ
-var LETTERS = letters.LETTERS
-var FINAL = letters.FINAL
-var INITIAL = letters.INITIAL
-var MEDIAL = letters.MEDIAL
-var UNSHAPED = letters.UNSHAPED
+const letters = preload("res://addons/arabic-text/reshaper/letters.gd")
+const ISOLATED = letters.ISOLATED
+const TATWEEL = letters.TATWEEL
+const ZWJ = letters.ZWJ
+const LETTERS = letters.LETTERS
+const FINAL = letters.FINAL
+const INITIAL = letters.INITIAL
+const MEDIAL = letters.MEDIAL
+const UNSHAPED = letters.UNSHAPED
 
-var HARAKAT_RE = RegEx.new()
 
-var _ligatures_re = RegEx.new()
-var _ligature_dict = {}
+static func reshape(text):
+	var HARAKAT_RE = RegEx.new()
 
-func _init():
-	var patterns = []
-	var FORMS = 1
-	var MATCH = 0
+	var _ligatures_re = RegEx.new()
+	var _ligature_dict = {}
 	
 	var ligature = '\u0644\u0627'
 	var replacement = ['\uFEFB', '', '', '\uFEFC']
 	
 	_ligature_dict[ligature] = replacement
 	_ligatures_re.compile(ligature)
-
-
-func reshape(text):
+	
 	HARAKAT_RE.compile('[\u0610-\u061a\u064b-\u065f\u0670\u06d6-\u06dc\u06df-\u06e8\u06ea-\u06ed\u08d4-\u08e1\u08d4-\u08ed\u08e3-\u08ff]')
 
 	if not text:

@@ -1,10 +1,10 @@
-var db = preload("res://addons/arabic-text/bidi/unicode_db.gd").new()
-var index1 = db.index1
-var index2 = db.index2
-var Database_Records = db.Database_Records
-var bidi_names = db.BidirectionalNames
+const db = preload("res://addons/arabic-text/bidi/unicode_db.gd")
+const index1 = db.index1
+const index2 = db.index2
+const Database_Records = db.Database_Records
+const bidi_names = db.BidirectionalNames
 
-var SHIFT = 7
+const SHIFT = 7
 
 
 enum DatabaseRecord {
@@ -12,7 +12,7 @@ enum DatabaseRecord {
 	mirrored=3
 	} 
 
-func bidirectional(ch):
+static func bidirectional(ch):
 	var code = ch.ord_at(0)
 	var index = 0
 	if code >= 0x110000:
@@ -29,7 +29,7 @@ func bidirectional(ch):
 	var name = bidi_names[bidi];
 	return name
 
-func mirrored(ch):
+static func mirrored(ch):
 	var code = ch.ord_at(0)
 	var index = 0
 	if code >= 0x110000:

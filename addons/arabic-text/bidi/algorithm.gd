@@ -17,47 +17,35 @@ tool
 # Copyright (C) 2008-2010 Yaacov Zamir <kzamir_a_walla.co.il>,
 # Copyright (C) 2010-2015 Meir kriheli <mkriheli@gmail.com>.
 
-var MIRRORED = preload("res://addons/arabic-text/bidi/mirror.gd").new().MIRRORED
-
-var unicodedata = preload("res://addons/arabic-text/bidi/unicodedata.gd").new()
-
-var True = true
-var False = false
-var None = null
+const MIRRORED = preload("res://addons/arabic-text/bidi/mirror.gd").MIRRORED
+const unicodedata = preload("res://addons/arabic-text/bidi/unicodedata.gd")
+const mappings = preload("res://addons/arabic-text/bidi/mappings.gd")
 
 # Some funcinitions
-var PARAGRAPH_LEVELS = {'L': 0, 'AL': 1, 'R': 1}
-var EXPLICIT_LEVEL_LIMIT = 62
+const PARAGRAPH_LEVELS = {'L': 0, 'AL': 1, 'R': 1}
+const EXPLICIT_LEVEL_LIMIT = 62
 
-
-func _LEAST_GREATER_ODD(x):
-	return (x + 1) | 1
-
-
-func _LEAST_GREATER_EVEN(x):
-	return (x + 2) & ~1
-
-
-var X2_X5_MAPPINGS = {
-	'RLE': [funcref(self, '_LEAST_GREATER_ODD'), 'N'],
-	'LRE': [funcref(self, '_LEAST_GREATER_EVEN'), 'N'],
-	'RLO': [funcref(self, '_LEAST_GREATER_ODD'), 'R'],
-	'LRO': [funcref(self, '_LEAST_GREATER_EVEN'), 'L'],
+const X2_X5_KEYS = ['RLE', 'LRE', 'RLO', 'LRO']
+const X2_X5_MAPPINGS = {
+	'RLE': ['_LEAST_GREATER_ODD', 'N'],
+	'LRE': ['_LEAST_GREATER_EVEN', 'N'],
+	'RLO': ['_LEAST_GREATER_ODD', 'R'],
+	'LRO': ['_LEAST_GREATER_EVEN', 'L'],
 }
 
 # Added 'B' so X6 won't execute in that case and X8 will run it's course
-var X6_IGNORED = X2_X5_MAPPINGS.keys() + ['BN', 'PDF', 'B']
-var X9_REMOVED = X2_X5_MAPPINGS.keys() + ['BN', 'PDF']
+const X6_IGNORED = X2_X5_KEYS + ['BN', 'PDF', 'B']
+const X9_REMOVED = X2_X5_KEYS + ['BN', 'PDF']
 
 
-func _embedding_direction(x):
+static func _embedding_direction(x):
 	return ['L', 'R'][x % 2]
 
-var _IS_UCS2 = false
-var _SURROGATE_MIN = 55296  # D800
-var _SURROGATE_MAX = 56319  # DBFF
+const _IS_UCS2 = false
+const _SURROGATE_MIN = 55296  # D800
+const _SURROGATE_MAX = 56319  # DBFF
 
-func get_base_level(text, upper_is_rtl=false):
+static func get_base_level(text, upper_is_rtl=false):
 	var base_level = null
 
 	var prev_surrogate = false
@@ -69,7 +57,7 @@ func get_base_level(text, upper_is_rtl=false):
 			continue
 		elif prev_surrogate:
 			_ch = prev_surrogate + _ch
-			prev_surrogate = False
+			prev_surrogate = false
 
 		# treat upper as RTL ?
 		if upper_is_rtl and _ch.isupper():
@@ -87,13 +75,13 @@ func get_base_level(text, upper_is_rtl=false):
 			break
 
 	# P3
-	if base_level == None:
+	if base_level == null:
 		base_level = 0
 
 	return base_level
 
 
-func get_embedding_levels(text, storage, upper_is_rtl=false, debug=false):
+static func get_embedding_levels(text, storage, upper_is_rtl=false, debug=false):
 	var prev_surrogate = false
 	var base_level = storage['base_level']
 
@@ -104,7 +92,7 @@ func get_embedding_levels(text, storage, upper_is_rtl=false, debug=false):
 			continue
 		elif prev_surrogate:
 			_ch = prev_surrogate + _ch
-			prev_surrogate = False
+			prev_surrogate = false
 		
 		var bidi_type = null
 		if upper_is_rtl and _ch.isupper():
@@ -120,7 +108,7 @@ func get_embedding_levels(text, storage, upper_is_rtl=false, debug=false):
 		})
 
 
-func explicit_embed_and_overrides(storage, debug=False):
+static func explicit_embed_and_overrides(storage, debug=false):
 	var overflow_counter = 0
 	var almost_overflow_counter = 0
 	var directional_override = 'N'
@@ -131,9 +119,14 @@ func explicit_embed_and_overrides(storage, debug=False):
 
 	for _ch in storage['chars']:
 		var bidi_type = _ch['type']
-
-		var level_func = X2_X5_MAPPINGS.get(bidi_type, [None, None])[0]
-		var override = X2_X5_MAPPINGS.get(bidi_type, [None, None])[1]
+		
+		var x2_x5_mapping = X2_X5_MAPPINGS.get(bidi_type, [null, null])
+		var level_func_name = x2_x5_mapping[0]
+		var override = x2_x5_mapping[1]
+		
+		var level_func 
+		if level_func_name != null:
+			level_func = funcref(mappings, level_func_name)
 
 		if level_func != null:
 			# So this is X2 to X5
@@ -200,11 +193,11 @@ func explicit_embed_and_overrides(storage, debug=False):
 	calc_level_runs(storage)
 
 
-func calc_level_run(b_l, b_r):
+static func calc_level_run(b_l, b_r):
 	return ['L', 'R'][int(max(b_l, b_r)) % 2]
 
 
-func calc_level_runs(storage):
+static func calc_level_runs(storage):
 	"""Split the storage to run of char types at the same level.
 
 	Applies X10. See http://unicode.org/reports/tr9/#X10
@@ -223,7 +216,7 @@ func calc_level_runs(storage):
 	var first_char = chars[0]
 
 	var sor = calc_level_run(storage['base_level'], first_char['level'])
-	var eor = None
+	var eor = null
 
 	var run_start = 0
 	var run_length = 0
@@ -256,7 +249,7 @@ func calc_level_runs(storage):
 							'type': curr_type, 'length': run_length})
 
 
-func resolve_weak_types(storage, debug=False):
+static func resolve_weak_types(storage, debug=false):
 	"""Resolve weak type rules W1 - W3.
 
 	See: http://unicode.org/reports/tr9/#Resolving_Weak_Types
@@ -348,7 +341,7 @@ func resolve_weak_types(storage, debug=False):
 				prev_strong = _ch['type']
 
 
-func resolve_neutral_types(storage, debug):
+static func resolve_neutral_types(storage, debug):
 	"""Resolving neutral types. Implements N1 and N2
 
 	See: http://unicode.org/reports/tr9/#Resolving_Neutral_Types
@@ -366,7 +359,7 @@ func resolve_neutral_types(storage, debug):
 		
 		var total_chars = len(chars)
 
-		var seq_start = None
+		var seq_start = null
 		var prev_bidi_type = null
 		for idx in range(total_chars):
 			var _ch = chars[idx]
@@ -381,7 +374,7 @@ func resolve_neutral_types(storage, debug):
 					seq_start = idx
 					prev_bidi_type = chars[idx-1]['type']
 			else:
-				if not (seq_start == None):
+				if not (seq_start == null):
 					var next_bidi_type = chars[idx]['type']
 
 					if prev_bidi_type in ['AN', 'EN']:
@@ -402,10 +395,10 @@ func resolve_neutral_types(storage, debug):
 							chars[seq_idx]['type'] = \
 								_embedding_direction(chars[seq_idx]['level'])
 
-					seq_start = None
+					seq_start = null
 
 
-func resolve_implicit_levels(storage, debug):
+static func resolve_implicit_levels(storage, debug):
 	"""Resolving implicit levels (I1, I2)
 
 	See: http://unicode.org/reports/tr9/#Resolving_Implicit_Levels
@@ -437,7 +430,7 @@ func resolve_implicit_levels(storage, debug):
 					_ch['level'] += 1
 
 
-func reverse_contiguous_sequence(storage, line_start, line_end, highest_level,
+static func reverse_contiguous_sequence(storage, line_start, line_end, highest_level,
 								lowest_odd_level):
 	"""L2. From the highest level found in the text to the lowest odd
 	level on each line, including intermediate levels not actually
@@ -486,12 +479,12 @@ func reverse_contiguous_sequence(storage, line_start, line_end, highest_level,
 				storage['chars'].append(c[i])
 
 
-func reorder_resolved_levels(storage, debug):
+static func reorder_resolved_levels(storage, debug):
 	"""L1 and L2 rules"""
 
 	# Applies L1.
 
-	var should_reset = True
+	var should_reset = true
 	var chars = storage['chars']
 	
 	var c = chars.duplicate()
@@ -503,7 +496,7 @@ func reorder_resolved_levels(storage, debug):
 			# 1. Segment separators,
 			# 2. Paragraph separators,
 			_ch['level'] = storage['base_level']
-			should_reset = True
+			should_reset = true
 		elif should_reset and _ch['orig'] in ['BN', 'WS']:
 			# 3. Any sequence of whitespace characters preceding a segment
 			# separator or paragraph separator
@@ -511,7 +504,7 @@ func reorder_resolved_levels(storage, debug):
 			# line.
 			_ch['level'] = storage['base_level']
 		else:
-			should_reset = False
+			should_reset = false
 
 	var max_len = len(chars)
 
@@ -531,7 +524,6 @@ func reorder_resolved_levels(storage, debug):
 		if char_level > highest_level:
 			highest_level = char_level
 		
-#		print(char_level % 2)
 		if char_level % 2 == 1 and char_level < lowest_odd_level:
 			lowest_odd_level = char_level
 
@@ -550,7 +542,7 @@ func reorder_resolved_levels(storage, debug):
 			lowest_odd_level = EXPLICIT_LEVEL_LIMIT
 
 
-func apply_mirroring(storage, debug):
+static func apply_mirroring(storage, debug):
 	"""Applies L4: mirroring
 
 	See: http://unicode.org/reports/tr9/#L4
@@ -565,27 +557,27 @@ func apply_mirroring(storage, debug):
 			_ch['ch'] = MIRRORED.get(unichar, unichar)
 
 
-func get_empty_storage():
+static func get_empty_storage():
 	"""Return an empty storage skeleton, usable for testing"""
 	return {
-		'base_level': None,
-		'base_dir': None,
+		'base_level': null,
+		'base_dir': null,
 		'chars': [],
 		'runs': [],
 	}
 
 
-func get_display(unicode_or_str, encoding='utf-8', upper_is_rtl=False,
-				base_dir=None, debug=False):
+static func get_display(unicode_or_str, encoding='utf-8', upper_is_rtl=false,
+				base_dir=null, debug=false):
 	"""Accepts unicode or string. In case it's a string, `encoding`
 	is needed as it works on unicode ones (funcault:"utf-8").
 
-	Set `upper_is_rtl` to True to treat upper case chars as strong 'R'
-	for debugging (funcault: False).
+	Set `upper_is_rtl` to true to treat upper case chars as strong 'R'
+	for debugging (funcault: false).
 
 	Set `base_dir` to 'L' or 'R' to override the calculated base_level.
 
-	Set `debug` to True to display (using sys.stderr) the steps taken with the
+	Set `debug` to true to display (using sys.stderr) the steps taken with the
 	algorithm.
 
 	Returns the display layout, either as unicode or `encoding` encoded
@@ -596,7 +588,7 @@ func get_display(unicode_or_str, encoding='utf-8', upper_is_rtl=False,
 	var text = unicode_or_str
 	
 	var base_level = null
-	if base_dir == None:
+	if base_dir == null:
 		base_level = get_base_level(text, upper_is_rtl)
 	else:
 		base_level = PARAGRAPH_LEVELS[base_dir]

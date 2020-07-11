@@ -19,7 +19,7 @@
 #   3. Letters
 # This way we make sure we replace the longest ligatures first
 
-var LIGATURES = [
+const LIGATURES = [
 	# Sentences
 	['ARABIC LIGATURE BISMILLAH AR-RAHMAN AR-RAHEEM', [
 		'\u0628\u0633\u0645\u0020\u0627\u0644\u0644\u0647\u0020\u0627\u0644\u0631\u062D\u0645\u0646\u0020\u0627\u0644\u0631\u062D\u064A\u0645',

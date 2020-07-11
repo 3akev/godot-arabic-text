@@ -13,16 +13,16 @@
 # <letter> should be in final form. If no replacement is specified for a form,
 # then no that means the letter doesn't support this form.
 
-var UNSHAPED = 255
-var ISOLATED = 0
-var INITIAL = 1
-var MEDIAL = 2
-var FINAL = 3
+const UNSHAPED = 255
+const ISOLATED = 0
+const INITIAL = 1
+const MEDIAL = 2
+const FINAL = 3
 
-var TATWEEL = '\u0640'
-var ZWJ = '\u200D'
+const TATWEEL = '\u0640'
+const ZWJ = '\u200D'
 
-var LETTERS = {
+const LETTERS = {
 	# ARABIC LETTER HAMZA
 	'\u0621': ['\uFE80', '', '', ''],
 	# ARABIC LETTER ALEF WITH MADDA ABOVE
@@ -183,21 +183,21 @@ var LETTERS = {
 }
 
 
-func connects_with_letter_before(letter):
+static func connects_with_letter_before(letter):
 	if not (letter in LETTERS):
 		return false
 	var forms = LETTERS[letter]
 	return forms[FINAL] or forms[MEDIAL]
 
 
-func connects_with_letter_after(letter):
+static func connects_with_letter_after(letter):
 	if not (letter in LETTERS):
 		return false
 	var forms = LETTERS[letter]
 	return forms[INITIAL] or forms[MEDIAL]
 
 
-func connects_with_letters_before_and_after(letter):
+static func connects_with_letters_before_and_after(letter):
 	if not (letter in LETTERS):
 		return false
 	var forms = LETTERS[letter]
