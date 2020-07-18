@@ -1,6 +1,6 @@
 extends "res://addons/gut/test.gd"
 
-# the intent behind this is to black-box test this mess, find out what works and what doesn't
+# the intent behind this is to black-box test the algorithm
 # this website is useful for getting the correct output:
 # http://www.arabic-keyboard.org/photoshop-arabic/
 
@@ -37,5 +37,17 @@ func test_multiline():
 	var expected = """ﺎﺒﺣﺮﻣ
 ﻢﺋﺎﻏ ﻮﺠﻟﺍ
 ﺓﺪﻳﺪﺷ ﺡﺎﻳﺮﻟﺍﻭ"""
+	var result = arabic.process_text(input)
+	assert_eq(result, expected)
+
+func test_brackets():
+	var input = "كلام عربي (مقوس)"
+	var expected = "(ﺱﻮﻘﻣ) ﻲﺑﺮﻋ ﻡﻼﻛ"
+	var result = arabic.process_text(input)
+	assert_eq(result, expected)
+
+func test_harakat():
+	var input = "يَفْعَلُ"
+	var expected = "ﻞُﻌَﻔْﻳَ"
 	var result = arabic.process_text(input)
 	assert_eq(result, expected)

@@ -1,7 +1,7 @@
 tool
 extends Label
 
-const arabic = preload('res://addons/arabic-text/arabic.gd')
+const arabic = preload("res://addons/arabic-text/arabic.gd")
 
 var prev_text = ''
 

@@ -1,6 +1,6 @@
 # The following was taken from CPython code, unsure if available to gdscript otherwise
 
-const db = preload("res://addons/arabic-text/bidi/unicode_db.gd")
+const db = preload("res://addons/arabic-text/UBA/database/unicode_db.gd")
 const index1 = db.index1
 const index2 = db.index2
 const Database_Records = db.Database_Records

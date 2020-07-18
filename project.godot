@@ -16,6 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="arabic-text"
+run/main_scene="res://test/tests.tscn"
 config/icon="res://icon.png"
 
 [editor_plugins]

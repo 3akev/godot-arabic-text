@@ -1,10 +1,11 @@
 extends "res://addons/gut/test.gd"
 
-const UBA = preload("res://addons/arabic-text/bidi/UBA.gd")
+const paragraph = preload("res://addons/arabic-text/UBA/algorithm/paragraph.gd")
 
 func _assert_inputs(inputs, expected):
 	for input in inputs:
-		var result = UBA.get_paragraph_level(input)
+		var data = {"chars": paragraph.preprocess_text(input)}
+		var result = paragraph.get_paragraph_level(data)
 		assert_eq(result, expected)
 
 func test_return_ltr_if_first_strong_char_ltr():
@@ -14,7 +15,7 @@ func test_return_ltr_if_first_strong_char_ltr():
 		"(Lorem ipsum dolor sit amet.) كلام عربي."
 	], 0)
 
-func test_return_rtl_if_first_strong_char_rtl_():
+func test_return_rtl_if_first_strong_char_rtl():
 	_assert_inputs([
 		"السلام عليكم ورحمة الله وبركاته",
 		"كلام عربي. Lorem ipsum dolor sit amet.",

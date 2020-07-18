@@ -11,4 +11,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 _run_on_load = true
+_include_subdirectories = true
 _directory1 = "res://test/unit"
+_directory2 = "res://test/integration"
