@@ -23,14 +23,14 @@ margin_top = 76.0
 margin_right = 671.0
 margin_bottom = 154.0
 custom_fonts/font = SubResource( 1 )
-text = "this plugin allows you to use ﺔﻐﻠﻟﺍ ﺔﻴﺑﺮﻌﻟﺍ in your
-games "
+text = "this plugin allows you to use ﺔﻴﺑﺮﻌﻟﺍ ﺔﻐﻠﻟﺍ in your
+games"
 autowrap = true
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-arabic_input = "this plugin allows you to use اللغة العربية in your games "
+arabic_input = "this plugin allows you to use اللغة العربية in your games"
 
 [node name="ALabel2" type="Label" parent="."]
 margin_left = 203.54
@@ -38,7 +38,7 @@ margin_top = 165.928
 margin_right = 650.54
 margin_bottom = 238.928
 custom_fonts/font = SubResource( 1 )
-text = "ﺀﺎﻨﺒﻟ Engine Game Godot ﻡﺍﺪﺨﺘﺳﺍ ﻚﻨﻜﻤﻳ
+text = "ﺀﺎﻨﺒﻟ Godot Game Engine ﻡﺍﺪﺨﺘﺳﺍ ﻚﻨﻜﻤﻳ
 ﺓﺰﻴﻤﻣ ﺏﺎﻌﻟﺃ"
 align = 1
 autowrap = true

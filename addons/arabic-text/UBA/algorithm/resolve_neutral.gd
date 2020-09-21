@@ -82,36 +82,30 @@ static func N0(sequence, data):
 				
 
 static func N1(sequence):
-	var prev_strong_type = null
+	var strong_type = null
 	var NI_sequence = []
+	var is_in_sequence = false
 	
 	for ch in sequence.chars:
-		if ch['bidi_type'] in ['R', 'EN', 'AN']:
-			prev_strong_type = 'R'
-		elif ch['bidi_type'] == 'L':
-			prev_strong_type = 'L'
-		
 		if ch['bidi_type'] in ["B", "S", "WS", "ON", "FSI", "LRI", "RLI", "PDI"]:
+			is_in_sequence = true
 			NI_sequence.append(ch)
-			break
-	
-	if NI_sequence.size() == 0:
-		return
-	
-	var following_strong_type = null
-	for ch in sequence.chars.slice(sequence.chars.find(NI_sequence[0]), sequence.chars.size() - 1):
-		if not (ch['bidi_type'] in ["B", "S", "WS", "ON", "FSI", "LRI", "RLI", "PDI"]):
-			if ch['bidi_type'] in ['R', 'EN', 'AN']:
-				following_strong_type = 'R'
-			elif ch['bidi_type'] == 'L':
-				following_strong_type = 'L'
-			break
 		else:
-			NI_sequence.append(ch)
-	
-	if prev_strong_type == following_strong_type:
-		for ch in NI_sequence:
-			ch['bidi_type'] = prev_strong_type
+			var new_type = null
+			if ch['bidi_type'] in ['R', 'EN', 'AN']:
+				new_type = 'R'
+			elif ch['bidi_type'] == 'L':
+				new_type = 'L'
+			
+			if new_type != null:
+				if is_in_sequence and strong_type == new_type:
+					for _ch in NI_sequence:
+						_ch['bidi_type'] = strong_type
+					
+				NI_sequence = []
+				is_in_sequence = false
+				strong_type = new_type
+
 			
 static func N2(sequence):
 	for ch in sequence.chars:
