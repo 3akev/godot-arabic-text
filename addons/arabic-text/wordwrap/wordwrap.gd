@@ -1,5 +1,3 @@
-# TODO: unit test this
-
 static func wrap_text(input: String, font: Font, size: Vector2):
 	if input.empty(): 
 		return
