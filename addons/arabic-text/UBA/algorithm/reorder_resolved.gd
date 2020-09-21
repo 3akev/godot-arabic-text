@@ -48,19 +48,19 @@ static func L2(data):
 				
 		
 		for sequence_chars in sequences:
-			if sequence_chars.size() ==0 : continue;
-			var first_char = sequence_chars[0]
-			var index = data['chars'].find(first_char)
-			var chars = []
-			
-			for j in range(0, index):
-				chars.append(data['chars'][j])
-			for j in range(index + sequence_chars.size() - 1, index - 1, -1):
-				chars.append(data['chars'][j])
-			for j in range(index + sequence_chars.size(), data['chars'].size()):
-				chars.append(data['chars'][j])
-			
-			data['chars'] = chars
+			if not sequence_chars.empty():
+				var first_char = sequence_chars[0]
+				var index = data['chars'].find(first_char)
+				var chars = []
+				
+				for j in range(0, index):
+					chars.append(data['chars'][j])
+				for j in range(index + sequence_chars.size() - 1, index - 1, -1):
+					chars.append(data['chars'][j])
+				for j in range(index + sequence_chars.size(), data['chars'].size()):
+					chars.append(data['chars'][j])
+				
+				data['chars'] = chars
 
 static func L3(data):
 	var non_spacing_chars = []

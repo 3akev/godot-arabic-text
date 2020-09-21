@@ -114,25 +114,9 @@ static func N1(sequence):
 			ch['bidi_type'] = prev_strong_type
 			
 static func N2(sequence):
-####################  main code ######################
-#	for ch in sequence.chars:
-#		if ch['bidi_type'] in ["B", "S", "WS", "ON", "FSI", "LRI", "RLI", "PDI"]:
-#			ch['bidi_type'] = sequence.embedding_direction
-#############  new code ###########################
-	var chars = sequence.chars;
-	var i = 0 ; 
-	for ch in chars:
+	for ch in sequence.chars:
 		if ch['bidi_type'] in ["B", "S", "WS", "ON", "FSI", "LRI", "RLI", "PDI"]:
-#			if i<= chars.size() -2 and ch["bidi_type"] == "WS" and chars[i-1]["bidi_type"] != chars[i+1]["bidi_type"]:
-			if i<= chars.size() -2 and ch["bidi_type"] == "WS":
-#				ch["bidi_type"] = "L";
-				if chars[i-1]["bidi_type"] == "R":
-					ch["bidi_type"] = "R";
-				else :
-					ch["bidi_type"] = chars[i+1]["bidi_type"];
-			else:
-				ch['bidi_type'] = sequence.embedding_direction
-		i += 1;
+			ch['bidi_type'] = sequence.embedding_direction
 
 static func resolve_neutral_and_isolate_formatting_types(data):
 	for sequence in data['isolating_run_sequences']:
