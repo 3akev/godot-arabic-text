@@ -1,23 +1,58 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://NotoSansArabic-Regular.ttf" type="DynamicFontData" id=1]
-[ext_resource path="res://NotoSans-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://MarkaziText-Bold.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://addons/arabic-text/ALabel.gd" type="Script" id=3]
 
 [sub_resource type="DynamicFont" id=1]
-size = 25
-font_data = ExtResource( 2 )
-fallback/0 = ExtResource( 1 )
+size = 28
+use_filter = true
+font_data = ExtResource( 1 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 28
+use_filter = true
+font_data = ExtResource( 1 )
 
 [node name="ALabel" type="Label"]
-margin_left = 210.983
-margin_top = 94.4549
-margin_right = 252.983
-margin_bottom = 117.455
+margin_left = 120.0
+margin_top = 97.0
+margin_right = 949.0
+margin_bottom = 407.0
 custom_fonts/font = SubResource( 1 )
-text = "ﻡﻼﺳ"
+align = 1
+autowrap = true
 script = ExtResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-arabic_input = "سلام"
+
+[node name="ALabel" type="Label" parent="."]
+margin_left = 200.0
+margin_top = 76.0
+margin_right = 671.0
+margin_bottom = 154.0
+custom_fonts/font = SubResource( 2 )
+text = "this plugin allows you to use ﺔﻴﺑﺮﻌﻟﺍ ﺔﻐﻠﻟﺍ in your
+games "
+autowrap = true
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+arabic_input = "this plugin allows you to use اللغة العربية in your games "
+
+[node name="ALabel2" type="Label" parent="."]
+margin_left = 203.54
+margin_top = 165.928
+margin_right = 650.54
+margin_bottom = 238.928
+custom_fonts/font = SubResource( 2 )
+text = "ﺀﺎﻨﺒﻟ Godot Game Engine ﻡﺍﺪﺨﺘﺳﺍ ﻚﻨﻜﻤﻳ
+ ﺓﺰﻴﻤﻣ ﺏﺎﻌﻟﺃ"
+align = 1
+autowrap = true
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+arabic_input = "يمكنك استخدام Godot Game Engine لبناء ألعاب مميزة "

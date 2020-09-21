@@ -25,7 +25,7 @@ static func identify_bracket_pairs(sequence, data):
 			
 			if bracket_type == 'c':
 				var element_index = stack.size() - 1
-				while entry[0] != stack[element_index][0] && element_index > 0:
+				while  element_index > 0 and entry[0] != stack[element_index][0] :
 					element_index -= 1
 				
 				var element = stack[element_index]
@@ -114,9 +114,25 @@ static func N1(sequence):
 			ch['bidi_type'] = prev_strong_type
 			
 static func N2(sequence):
-	for ch in sequence.chars:
+####################  main code ######################
+#	for ch in sequence.chars:
+#		if ch['bidi_type'] in ["B", "S", "WS", "ON", "FSI", "LRI", "RLI", "PDI"]:
+#			ch['bidi_type'] = sequence.embedding_direction
+#############  new code ###########################
+	var chars = sequence.chars;
+	var i = 0 ; 
+	for ch in chars:
 		if ch['bidi_type'] in ["B", "S", "WS", "ON", "FSI", "LRI", "RLI", "PDI"]:
-			ch['bidi_type'] = sequence.embedding_direction
+#			if i<= chars.size() -2 and ch["bidi_type"] == "WS" and chars[i-1]["bidi_type"] != chars[i+1]["bidi_type"]:
+			if i<= chars.size() -2 and ch["bidi_type"] == "WS":
+#				ch["bidi_type"] = "L";
+				if chars[i-1]["bidi_type"] == "R":
+					ch["bidi_type"] = "R";
+				else :
+					ch["bidi_type"] = chars[i+1]["bidi_type"];
+			else:
+				ch['bidi_type'] = sequence.embedding_direction
+		i += 1;
 
 static func resolve_neutral_and_isolate_formatting_types(data):
 	for sequence in data['isolating_run_sequences']:

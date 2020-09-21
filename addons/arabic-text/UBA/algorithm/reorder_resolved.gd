@@ -48,6 +48,7 @@ static func L2(data):
 				
 		
 		for sequence_chars in sequences:
+			if sequence_chars.size() ==0 : continue;
 			var first_char = sequence_chars[0]
 			var index = data['chars'].find(first_char)
 			var chars = []
