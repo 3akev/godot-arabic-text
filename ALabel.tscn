@@ -13,6 +13,9 @@ margin_left = 120.0
 margin_top = 97.0
 margin_right = 949.0
 margin_bottom = 407.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ALabel" type="Label" parent="."]
 margin_left = 200.0
@@ -20,7 +23,7 @@ margin_top = 76.0
 margin_right = 671.0
 margin_bottom = 154.0
 custom_fonts/font = SubResource( 1 )
-text = "this plugin allows you to use ﺔﻴﺑﺮﻌﻟﺍ ﺔﻐﻠﻟﺍ in your
+text = "this plugin allows you to use ﺔﻐﻠﻟﺍ ﺔﻴﺑﺮﻌﻟﺍ in your
 games "
 autowrap = true
 script = ExtResource( 3 )
