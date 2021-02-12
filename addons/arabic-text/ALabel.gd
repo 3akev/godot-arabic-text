@@ -27,5 +27,5 @@ func display():
 	text = arabic.process_text(temptext)
 
 func wrap_text(input):
-	return wordwrap(input, get_font("font"), get_rect().size)
+	return wordwrap.wrap_text(input, get_font("font"), get_rect().size)
 
