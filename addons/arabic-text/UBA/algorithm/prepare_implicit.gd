@@ -6,7 +6,13 @@ static func compare_levels(x, y):
 static func get_isolating_run_sequences(data):
 	var isolating_run_sequences = []
 	
-	var prev_level = data['chars'].front()['level']
+	var prev_level
+	
+	if data['chars'].front() != null:
+		prev_level = data['chars'].front()['level']
+	else:
+		prev_level = 0
+	
 	var start = 0
 	var end = 0
 	
