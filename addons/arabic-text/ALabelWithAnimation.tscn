@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://addons/arabic-text/ALabelWithAnimation.gd" type="Script" id=1]
+[ext_resource path="res://addons/arabic-text/Animation.gd" type="Script" id=2]
+[ext_resource path="res://MarkaziText-Bold.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="DynamicFont" id=1]
+size = 32
+font_data = ExtResource( 3 )
+
+[node name="ALabelWithAnimation" type="Label"]
+margin_right = 40.0
+margin_bottom = 14.0
+custom_fonts/font = SubResource( 1 )
+text = "!ﺎﻌﻴﻤﺟ ﻢﻜﺒﺣﺍ ﺎﻧﺍ
+ﺏﻮﺳ ﺍﺪﻋ ﺎﻣ"
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+arabic_input = "انا احبكم جميعا!
+ما عدا سوب"
+
+[node name="Animation" type="Node" parent="."]
+script = ExtResource( 2 )
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.1
+autostart = true
+
+[connection signal="timeout" from="Timer" to="Animation" method="_on_Timer_timeout"]
