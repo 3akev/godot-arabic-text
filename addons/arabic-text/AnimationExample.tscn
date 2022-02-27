@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://addons/arabic-text/AnimationExample.gd" type="Script" id=1]
+[ext_resource path="res://addons/arabic-text/ALabelWithAnimation.tscn" type="PackedScene" id=2]
+
+[node name="AnimationExample" type="Node2D"]
+script = ExtResource( 1 )
+
+[node name="ALabelWithAnimation" parent="." instance=ExtResource( 2 )]
+margin_right = 1024.0
+margin_bottom = 600.0
+text = "ﻼﻫﺍ"
+align = 1
+valign = 1
+arabic_input = "اهلا"
+
+[node name="Button" type="Button" parent="."]
+margin_left = 768.0
+margin_top = 384.0
+margin_right = 860.0
+margin_bottom = 404.0
+text = "         1         "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button2" type="Button" parent="."]
+margin_left = 464.0
+margin_top = 384.0
+margin_right = 556.0
+margin_bottom = 404.0
+text = "         2         "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button3" type="Button" parent="."]
+margin_left = 144.0
+margin_top = 384.0
+margin_right = 236.0
+margin_bottom = 404.0
+text = "         3         "
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="Button" to="." method="_on_Button_pressed"]
+[connection signal="pressed" from="Button2" to="." method="_on_Button2_pressed"]
+[connection signal="pressed" from="Button3" to="." method="_on_Button3_pressed"]
